@@ -82,3 +82,11 @@ class TestPostCompanies(BasicCompanyAPiTestCase):
     @pytest.mark.skip
     def test_should_be_skipped(self) -> None:
         self.assertEqual(1, 2)
+
+    def raise_covid19_exception(self) -> None:
+        raise ValueError("CoronaVirus Exception")
+
+    def test_raise_covid19_exception_should_pass(self) -> None:
+        with pytest.raises(ValueError) as e:
+            self.raise_covid19_exception()
+        assert "CoronaVirus Exception" == str(e.value)
