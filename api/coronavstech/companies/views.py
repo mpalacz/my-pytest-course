@@ -15,8 +15,14 @@ class CompanyViewSet(ModelViewSet):
     pagination_class = PageNumberPagination
 
 
-@api_view(http_method_names=['POST'])
+@api_view(http_method_names=["POST"])
 def send_company_email(request: Request) -> Response:
-    send_mail(subject=request.data.get("subject"), message=request.data.get("message"),
-              from_email='mpdevmail890@gmail.com', recipient_list=['mpdevmail890@gmail.com'])
-    return Response({'status': 'success', 'info': 'email sent successfully'}, status=200)
+    send_mail(
+        subject=request.data.get("subject"),
+        message=request.data.get("message"),
+        from_email="mpdevmail890@gmail.com",
+        recipient_list=["mpdevmail890@gmail.com"],
+    )
+    return Response(
+        {"status": "success", "info": "email sent successfully"}, status=200
+    )
