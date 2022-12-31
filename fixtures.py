@@ -9,4 +9,4 @@ def time_tracker():
     yield
     tock = datetime.now()
     diff = tock - tick
-    print(f'\n runtime: {diff.total_seconds()}')
+    print(f"\n runtime: {diff.total_seconds()}")
