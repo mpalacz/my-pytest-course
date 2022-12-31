@@ -20,7 +20,6 @@ pipelines:
         caches:
           - pip
         script:
-          - echo $PYTHONPATH
           - pip install pipenv --upgrade
           - pipenv install --system
-          - pytest fibonacci/ -s -v --durations=0 --cov=.
+          - pytest fibonacci -s -v --durations=0 --cov=.
