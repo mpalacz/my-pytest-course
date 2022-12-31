@@ -7,19 +7,20 @@ image: python:3.11.0
 
 pipelines:
   default:
-    - step:
-        name: Django Company API tests
-        caches:
-          - pip
-        script:
-           - pip install pipenv --upgrade
-           - pipenv install --system
-           - pytest api/coronavstech -s -v --durations=0 --cov=.
-    - step:
-        name: Fibonacci tests
-        caches:
-          - pip
-        script:
-          - pip install pipenv --upgrade
-          - pipenv install --system
-          - pytest fibonacci -s -v --durations=0 --cov=.
+    - parallel:
+      - step:
+          name: Django Company API tests
+          caches:
+            - pip
+          script:
+             - pip install pipenv --upgrade
+             - pipenv install --system
+             - pytest api/coronavstech -s -v --durations=0 --cov=.
+      - step:
+          name: Fibonacci tests
+          caches:
+            - pip
+          script:
+            - pip install pipenv --upgrade
+            - pipenv install --system
+            - pytest fibonacci -s -v --durations=0 --cov=.
