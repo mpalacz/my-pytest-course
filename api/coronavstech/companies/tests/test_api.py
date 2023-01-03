@@ -16,12 +16,16 @@ def test_zero_companies_should_return_empty_list(client) -> None:
     assert json.loads(response.content) == []
 
 
-def test_one_company_exists_should_succeed(client) -> None:
-    test_company = Company.objects.create(name="Amazon")
+@pytest.fixture
+def amazon() -> Company:
+    return Company.objects.create(name="amazon")
+
+
+def test_one_company_exists_should_succeed(client, amazon) -> None:
     response = client.get(companies_url)
     response_content = json.loads(response.content)[0]
     assert response.status_code == 200
-    assert response_content.get("name") == test_company.name
+    assert response_content.get("name") == amazon.name
     assert response_content.get("status") == "Hiring"
     assert response_content.get("application_link") == ""
     assert response_content.get("notes") == ""
@@ -115,3 +119,28 @@ def test_logged_info_level(caplog) -> None:
     with caplog.at_level(logging.INFO):
         logger.info("I am logging info level")
         assert "I am logging info level" in caplog.text
+
+
+# Fixtures
+
+
+@pytest.fixture()
+def company(**kwargs):
+    def _company_factory(**kwargs) -> Company:
+        company_name = kwargs.pop("name", "TestCompany INC")
+        return Company.objects.create(name=company_name, **kwargs)
+
+    return _company_factory
+
+
+def test_multiple_companies_exists_should_succeed(client, company) -> None:
+    tiktok: Company = company(name="TikTok")
+    twitch: Company = company(name="Twitch")
+    test_company: Company = company()
+    company_names = {tiktok.name, twitch.name, test_company.name}
+    response_companies = client.get(companies_url).json()
+    assert len(company_names) == len(response_companies)
+    response_company_names = set(
+        map(lambda company: company.get("name"), response_companies)
+    )
+    assert company_names == response_company_names
