@@ -17,11 +17,6 @@ def test_zero_companies_should_return_empty_list(client) -> None:
     assert json.loads(response.content) == []
 
 
-@pytest.fixture
-def amazon() -> Company:
-    return Company.objects.create(name="amazon")
-
-
 def test_one_company_exists_should_succeed(client, amazon) -> None:
     response = client.get(companies_url)
     response_content = json.loads(response.content)[0]
@@ -123,24 +118,6 @@ def test_logged_info_level(caplog) -> None:
 
 
 # Fixtures
-
-
-@pytest.fixture
-def companies(request, company) -> List[Company]:
-    companies = []
-    names = request.param
-    for name in names:
-        companies.append(company(name=name))
-    return companies
-
-
-@pytest.fixture
-def company(**kwargs):
-    def _company_factory(**kwargs) -> Company:
-        company_name = kwargs.pop("name", "TestCompany INC")
-        return Company.objects.create(name=company_name, **kwargs)
-
-    return _company_factory
 
 
 @pytest.mark.parametrize(
