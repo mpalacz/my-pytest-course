@@ -7,6 +7,7 @@ testing_env_companies_url = "http://127.0.0.1:8000/companies/"
 
 
 @pytest.mark.skip_in_ci
+@pytest.mark.skip(reason='This test needs localhost django server running')
 def test_zero_companies_django_agnostic() -> None:
     response = requests.get(url=testing_env_companies_url)
     assert response.status_code == 200
@@ -14,6 +15,7 @@ def test_zero_companies_django_agnostic() -> None:
 
 
 @pytest.mark.skip_in_ci
+@pytest.mark.skip(reason='This test needs localhost django server running')
 def test_create_company_with_layoffs_django_agnostic() -> None:
     response = requests.post(
         url=testing_env_companies_url,
